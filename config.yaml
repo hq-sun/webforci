@@ -1,2 +1,45 @@
-vender:'cambricon'
-chip:'MLU590_M9'
+launcher:
+  hosts: 'hostfile'
+  host_port: 2222
+  master_port: 29501
+  ssh_port: 22
+  exp_name: null
+  work_dir: null
+  loglevel: 'info'
+  db_path: 'flagdiagnose.db'
+  ssh_timeout: 360
+  spj_tolerance: 0.2
+  cluster:
+    position: 'SZ2'
+    network: 'IB'
+    vendor: 'nvidia'
+    chip: 'H100_80_SXM'
+    nchips_per_node: 8
+    exec_env_var: 'env.sh'
+    where_is_launcher: "container"
+    is_share_memory: true
+
+tasks:
+  baremetal:
+    - 'FabricManagerStatus'
+    - 'CPUPerformanceTest'
+    - 'MemoryPerformanceTest'
+  container:
+    Pre-Check:
+      - 'CheckChipNum' 
+    Intra-Node:
+      - 'ChipTopo'
+      - 'ComputeCore_FP16'
+      - 'MainMemoryBw'
+      - 'InterConnectD2H'
+      - 'InterConnectH2D'
+      - 'IntraserverAllReduce'
+      - 'IntraTrainLlama3_8B'
+    Inter-Node:
+      - 'InterserverAllReduce'
+      - 'InterTrainLlama3_8B'
+      - 'InterTrainDiagnoseLLM'
+      #- 'IbWriteBw'
+      #- 'IbWriteLat'
+      #- 'InterserverP2P'
+
