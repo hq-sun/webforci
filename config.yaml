@@ -1,4 +1,4 @@
-auncher:
+launcher:
   hosts: 'hostfile'
   host_port: 2222
   master_port: 29501
@@ -12,8 +12,8 @@ auncher:
   cluster:
     position: 'SZ2'
     network: 'IB'
-    vendor: 'cambricon'
-    chip: 'MLU590_M9'
+    vendor: 'nvidia'
+    chip: 'H100_80_SXM'
     nchips_per_node: 8
     exec_env_var: 'env.sh'
     where_is_launcher: "container"
@@ -26,6 +26,20 @@ tasks:
     - 'MemoryPerformanceTest'
   container:
     Pre-Check:
-      - 'CheckChipNum'
+      - 'CheckChipNum' 
     Intra-Node:
-                                                                                                                                                                             1,1           Top
+      - 'ChipTopo'
+      - 'ComputeCore_FP16'
+      - 'MainMemoryBw'
+      - 'InterConnectD2H'
+      - 'InterConnectH2D'
+      - 'IntraserverAllReduce'
+      - 'IntraTrainLlama3_8B'
+    Inter-Node:
+      - 'InterserverAllReduce'
+      - 'InterTrainLlama3_8B'
+      - 'InterTrainDiagnoseLLM'
+      #- 'IbWriteBw'
+      #- 'IbWriteLat'
+      #- 'InterserverP2P'
+
