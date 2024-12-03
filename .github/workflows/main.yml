@@ -28,7 +28,8 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: sed -i 's/'H100_80_SXM'/'MLU590_M9'/g' config.yaml
+        run:  bash cambricon.sh
+      #sed -i 's/'H100_80_SXM'/'MLU590_M9'/g' config.yaml
              
 
       # Runs a set of commands using the runners shell
